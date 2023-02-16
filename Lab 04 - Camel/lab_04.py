@@ -70,7 +70,6 @@ Q. Quit. \n""")
         elif thirst > 6:
             print("You died of thirst!")
             done = True
-
         # Camel tiredness notification
         if 5 < camel_tiredness <= 8 and not done:
             print("Your camel is getting tired.")
@@ -78,7 +77,6 @@ Q. Quit. \n""")
         elif camel_tiredness > 8:
             print("Your camel is dead.")
             done = True
-
         # Natives game over
         if natives_distance >= miles_traveled:
             print("The natives caught up to you, and killed you.")
@@ -86,12 +84,10 @@ Q. Quit. \n""")
         # Native distance warning
         elif miles_traveled - natives_distance <= 15:
             print("The natives are getting close!")
-
         # Win condition
         if miles_traveled >= 200 and not done:
             print("You escaped the natives and won the game!")
             done = True
-
         # Oasis check
         if oasis == 20 and not done:
             canteen_drinks += 1
