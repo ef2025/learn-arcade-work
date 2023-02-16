@@ -27,19 +27,16 @@ Q. Quit. \n""")
         if user_input.upper() == "Q":
             done = True
             print("Game Over")
-
         # status check
         elif user_input.upper() == "E":
             print("Miles traveled: ", miles_traveled)
             print("Drinks in canteen: ", canteen_drinks)
             print("The natives are", miles_traveled - natives_distance, "miles behind you. \n")
-
         # Stop for the night
         elif user_input.upper() == "D":
             camel_tiredness = 0
             print("The camel is happy and energized, with it's fatigue now", camel_tiredness)
             natives_distance += random.randrange(7, 14)
-
         # Ahead full speed
         elif user_input.upper() == "C":
             miles_traveled += random.randrange(10, 21)
@@ -48,7 +45,6 @@ Q. Quit. \n""")
             thirst += 1
             camel_tiredness += random.randrange(1, 4)
             oasis = random.randrange(1, 21)
-
         # Ahead moderate speed
         elif user_input.upper() == "B":
             miles_traveled += random.randrange(5, 13)
@@ -57,7 +53,6 @@ Q. Quit. \n""")
             camel_tiredness += 1
             natives_distance += random.randrange(7, 14)
             oasis = random.randrange(1, 21)
-
         # Drink from canteen
         elif user_input.upper() == "A":
             if canteen_drinks == 0:
@@ -67,10 +62,10 @@ Q. Quit. \n""")
                 thirst = 0
                 print("You feel refreshed! You have", canteen_drinks, "drinks remaining.")
 
+        # Conditions
         # Thirst notification
         if 4 < thirst <= 6 and not done:
             print("You are thirsty.")
-
         # Died of Thirst
         elif thirst > 6:
             print("You died of thirst!")
@@ -79,7 +74,6 @@ Q. Quit. \n""")
         # Camel tiredness notification
         if 5 < camel_tiredness <= 8 and not done:
             print("Your camel is getting tired.")
-
         # Camel death
         elif camel_tiredness > 8:
             print("Your camel is dead.")
@@ -89,7 +83,6 @@ Q. Quit. \n""")
         if natives_distance >= miles_traveled:
             print("The natives caught up to you, and killed you.")
             done = True
-
         # Native distance warning
         elif miles_traveled - natives_distance <= 15:
             print("The natives are getting close!")
@@ -99,6 +92,7 @@ Q. Quit. \n""")
             print("You escaped the natives and won the game!")
             done = True
 
+        # Oasis check
         if oasis == 20 and not done:
             canteen_drinks += 1
             camel_tiredness = 0
