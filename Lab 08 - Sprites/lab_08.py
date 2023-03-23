@@ -1,40 +1,80 @@
-""" Sprite Sample Program """
+""" Lab 8 """
 
 import random
 import arcade
+import math
 
 # --- Constants ---
 SPRITE_SCALING_PLAYER = 0.5
 SPRITE_SCALING_COIN = 0.2
 SPRITE_SCALING_SAW = 0.4
-COIN_COUNT = 50
-SAW_COUNT = 30
+COIN_COUNT = 40
+SAW_COUNT = 20
 
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 600
 
 
 class Coin(arcade.Sprite):
+    def __init__(self, filename, sprite_scaling):
+        super().__init__(filename, sprite_scaling)
+        self.freeze = False
 
     def update(self):
-        self.center_y -= 1
+        if not self.freeze:
 
-        # See if we went off-screen
-        if self.center_y < -20:
-            self.center_y = SCREEN_HEIGHT + 20
+            self.center_y -= 1
+
+            if self.top < 0:
+                # Reset the coin to a random spot above the screen
+                self.center_y = random.randrange(SCREEN_HEIGHT + 20, SCREEN_HEIGHT + 100)
+                self.center_x = random.randrange(SCREEN_WIDTH)
 
 
 class Saw(arcade.Sprite):
 
-    def update(self):
-        self.center_y -= 1
+    def __init__(self, filename, sprite_scaling):
+        """ Constructor. """
+        # Call the parent class (Sprite) constructor
+        super().__init__(filename, sprite_scaling)
+        self.freeze = False
 
-        if self.center_y < -20:
-            self.center_y = SCREEN_HEIGHT + 20
+        # Current angle in radians
+        self.circle_angle = 0
+
+        # How far away from the center to orbit, in pixels
+        self.circle_radius = 0
+
+        # How fast to orbit, in radians per frame
+        self.circle_speed = 0.008
+
+        # Set the center of the point we will orbit around
+        self.circle_center_x = 0
+        self.circle_center_y = 0
+
+    def update(self):
+
+        if not self.freeze:
+
+            """ Update the saw's position. """
+            # Calculate a new x, y
+            self.center_x = self.circle_radius * math.sin(self.circle_angle) \
+                + self.circle_center_x
+            self.center_y = self.circle_radius * math.cos(self.circle_angle) \
+                + self.circle_center_y
+
+            # Increase the angle in prep for the next round.
+            self.circle_angle += self.circle_speed
+
+            self.angle += 1
+
+            # If we rotate past 360, reset it back a turn.
+            if self.angle > 359:
+                self.angle -= 360
 
 
 class MyGame(arcade.Window):
-    """ Our custom Window Class"""
+    """ Custom Window Class"""
 
     def __init__(self):
         """ Initializer """
@@ -59,7 +99,7 @@ class MyGame(arcade.Window):
         # Bad sound effect
         self.bad_sound = arcade.load_sound(":resources:sounds/hurt3.wav")
 
-        arcade.set_background_color(arcade.color.AMAZON)
+        arcade.set_background_color(arcade.color.DUKE_BLUE)
 
     def setup(self):
         """ Set up the game and initialize the variables. """
@@ -98,8 +138,15 @@ class MyGame(arcade.Window):
 
             saw = Saw(":resources:images/enemies/saw.png", SPRITE_SCALING_SAW)
 
-            saw.center_x = random.randrange(SCREEN_WIDTH)
-            saw.center_y = random.randrange(SCREEN_HEIGHT)
+            # Position the center of the circle the saw will orbit
+            saw.circle_center_x = random.randrange(SCREEN_WIDTH)
+            saw.circle_center_y = random.randrange(SCREEN_HEIGHT)
+
+            # Random radius from 10 to 200
+            saw.circle_radius = random.randrange(10, 200)
+
+            # Random start angle from 0 to 2pi
+            saw.circle_angle = random.random() * 2 * math.pi
 
             self.saw_list.append(saw)
 
@@ -117,9 +164,10 @@ class MyGame(arcade.Window):
     def on_mouse_motion(self, x, y, dx, dy):
         """ Handle Mouse Motion """
 
-        # Move the center of the player sprite to match the mouse x, y
-        self.player_sprite.center_x = x
-        self.player_sprite.center_y = y
+        if len(self.coin_list) > 0:
+            # Move the center of the player sprite to match the mouse x, y
+            self.player_sprite.center_x = x
+            self.player_sprite.center_y = y
 
     def update(self, delta_time):
         """ Movement and game logic """
@@ -146,6 +194,16 @@ class MyGame(arcade.Window):
             saw.remove_from_sprite_lists()
             self.score -= 1
             arcade.play_sound(self.bad_sound)
+
+        if len(self.coin_list) == 0:
+            arcade.draw_text("GAME OVER", 85, 300, arcade.csscolor.WHITE, 75)
+            for z in self.coin_list:
+                z.freeze = True
+
+            for z in self.saw_list:
+                z.freeze = True
+
+        arcade.finish_render()
 
 
 def main():
