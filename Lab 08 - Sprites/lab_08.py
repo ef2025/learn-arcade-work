@@ -22,9 +22,7 @@ class Coin(arcade.Sprite):
 
     def update(self):
         if not self.freeze:
-
             self.center_y -= 1
-
             if self.top < 0:
                 # Reset the coin to a random spot above the screen
                 self.center_y = random.randrange(SCREEN_HEIGHT + 20, SCREEN_HEIGHT + 100)
@@ -38,16 +36,12 @@ class Saw(arcade.Sprite):
         # Call the parent class (Sprite) constructor
         super().__init__(filename, sprite_scaling)
         self.freeze = False
-
         # Current angle in radians
         self.circle_angle = 0
-
         # How far away from the center to orbit, in pixels
         self.circle_radius = 0
-
         # How fast to orbit, in radians per frame
         self.circle_speed = 0.008
-
         # Set the center of the point we will orbit around
         self.circle_center_x = 0
         self.circle_center_y = 0
@@ -62,12 +56,9 @@ class Saw(arcade.Sprite):
                 + self.circle_center_x
             self.center_y = self.circle_radius * math.cos(self.circle_angle) \
                 + self.circle_center_y
-
             # Increase the angle in prep for the next round.
             self.circle_angle += self.circle_speed
-
             self.angle += 1
-
             # If we rotate past 360, reset it back a turn.
             if self.angle > 359:
                 self.angle -= 360
@@ -85,17 +76,13 @@ class MyGame(arcade.Window):
         self.player_list = None
         self.coin_list = None
         self.saw_list = None
-
         # Set up the player info
         self.player_sprite = None
         self.score = 0
-
         # Don't show the mouse cursor
         self.set_mouse_visible(False)
-
         # Good sound effect
         self.good_sound = arcade.load_sound(":resources:sounds/coin5.wav")
-
         # Bad sound effect
         self.bad_sound = arcade.load_sound(":resources:sounds/hurt3.wav")
 
@@ -108,12 +95,9 @@ class MyGame(arcade.Window):
         self.player_list = arcade.SpriteList()
         self.coin_list = arcade.SpriteList()
         self.saw_list = arcade.SpriteList()
-
         # Score
         self.score = 0
-
         # Set up the player
-        # Character image from kenney.nl
         self.player_sprite = arcade.Sprite(":resources:images/animated_characters/robot/robot_idle.png",
                                            SPRITE_SCALING_PLAYER)
         self.player_sprite.center_x = 50
@@ -122,32 +106,25 @@ class MyGame(arcade.Window):
 
         # Create the coins
         for i in range(COIN_COUNT):
-
             # Create the coin instance
             # Coin image directly from arcade
             coin = Coin(":resources:images/items/coinGold.png", SPRITE_SCALING_COIN)
-
             # Position the coin
             coin.center_x = random.randrange(SCREEN_WIDTH)
             coin.center_y = random.randrange(SCREEN_HEIGHT)
-
             # Add the coin to the lists
             self.coin_list.append(coin)
 
         for i in range(SAW_COUNT):
 
             saw = Saw(":resources:images/enemies/saw.png", SPRITE_SCALING_SAW)
-
             # Position the center of the circle the saw will orbit
             saw.circle_center_x = random.randrange(SCREEN_WIDTH)
             saw.circle_center_y = random.randrange(SCREEN_HEIGHT)
-
             # Random radius from 10 to 200
             saw.circle_radius = random.randrange(10, 200)
-
             # Random start angle from 0 to 2pi
             saw.circle_angle = random.random() * 2 * math.pi
-
             self.saw_list.append(saw)
 
     def on_draw(self):
@@ -156,7 +133,6 @@ class MyGame(arcade.Window):
         self.coin_list.draw()
         self.player_list.draw()
         self.saw_list.draw()
-
         # Put the text on the screen.
         output = f"Score: {self.score}"
         arcade.draw_text(output, 715, 580, arcade.color.WHITE, 14)
@@ -175,7 +151,6 @@ class MyGame(arcade.Window):
         # Call update on all sprites (The sprites don't do much in this
         # example though.)
         self.coin_list.update()
-
         # Generate a list of all sprites that collided with the player.
         coins_hit_list = arcade.check_for_collision_with_list(self.player_sprite,
                                                               self.coin_list)
@@ -185,9 +160,7 @@ class MyGame(arcade.Window):
             coin.remove_from_sprite_lists()
             self.score += 1
             arcade.play_sound(self.good_sound)
-
         self.saw_list.update()
-
         saw_hit_list = arcade.check_for_collision_with_list(self.player_sprite, self.saw_list)
 
         for saw in saw_hit_list:
@@ -199,7 +172,6 @@ class MyGame(arcade.Window):
             arcade.draw_text("GAME OVER", 85, 300, arcade.csscolor.WHITE, 75)
             for z in self.coin_list:
                 z.freeze = True
-
             for z in self.saw_list:
                 z.freeze = True
 
