@@ -82,48 +82,77 @@ class MyGame(arcade.Window):
         self.player_list.append(self.player_sprite)
 
         # -- Set up several columns of walls
-        for y in range(200, 1650, 210):
-            for x in range(200, 1600, 64):
+        for y in range(128, 1650, 256):
+            for x in range(256, 1592, 256):
                 # Randomly skip a box so the player can find a way through
-                if random.randrange(5) > 0:
-                    wall = arcade.Sprite(":resources:images/tiles/boxCrate_double.png", SPRITE_SCALING)
-                    wall.center_x = x
-                    wall.center_y = y
-                    self.wall_list.append(wall)
-
-        # can't get wall to seamlessly connect
-        for x in range(1600, 1601, 210):
-            for y in range(0, 1600, 64):
-                wall = arcade.Sprite(":resources:images/tiles/stoneCenter.png", SPRITE_SCALING)
-                wall.center_x = x
-                wall.center_y = y
-                if y % 2 != 0:
-                    arcade.Sprite(":resources:images/tiles/grassCenter.png", SPRITE_SCALING)
-                else:
-                    arcade.Sprite(":resources:images/tiles/grassCenter.png", SPRITE_SCALING)
-                self.wall_list.append(wall)
-
-        for x in range(200, 201, 210):
-            for y in range(0, 1600, 64):
-                wall = arcade.Sprite(":resources:images/tiles/stoneCenter.png", SPRITE_SCALING)
+                wall = arcade.Sprite(":resources:images/tiles/boxCrate.png", SPRITE_SCALING)
                 wall.center_x = x
                 wall.center_y = y
                 self.wall_list.append(wall)
 
-        for y in range(0, 1, 210):
-            for x in range(200, 1650, 64):
-                wall = arcade.Sprite(":resources:images/tiles/stoneCenter.png", SPRITE_SCALING)
-                wall.center_x = x
-                wall.center_y = y
+        for y in range(128, 1750, 256):
+            for x in range(512, 1592, 256):
+                # Randomly skip a box so the player can find a way through
+                wall = arcade.Sprite(":resources:images/tiles/boxCrate.png", SPRITE_SCALING)
+                wall.center_x = x - 128
+                wall.center_y = y - 128
                 self.wall_list.append(wall)
 
-        # Difficulty getting the border completely correct
-        for y in range(1600, 1601, 64):
-            for x in range(200, 1650, 64):
+        # coordinate_list = [[400, 500],
+        #                    [470, 500],
+        #                    [400, 570],
+        #                    [470, 570]]
+        #
+        # # Loop through coordinates
+        # for coordinate in coordinate_list:
+        #     wall = arcade.Sprite(":resources:images/tiles/boxCrate.png", SPRITE_SCALING)
+        #     wall.center_x = coordinate[0]
+        #     wall.center_y = coordinate[1]
+        #     self.wall_list.append(wall)
+
+        val = 0
+        for y in range(0, 1600, 64):
+            if val % 2 == 0:
                 wall = arcade.Sprite(":resources:images/tiles/stoneCenter.png", SPRITE_SCALING)
-                wall.center_x = x
-                wall.center_y = y
-                self.wall_list.append(wall)
+            else:
+                wall = arcade.Sprite(":resources:images/tiles/boxCrate_double.png", SPRITE_SCALING)
+            val += 1
+            wall.center_x = 1600
+            wall.center_y = y
+            self.wall_list.append(wall)
+
+        val = 0
+        for y in range(0, 1600, 64):
+            if val % 2 == 0:
+                wall = arcade.Sprite(":resources:images/tiles/stoneCenter.png", SPRITE_SCALING)
+            else:
+                wall = arcade.Sprite(":resources:images/tiles/boxCrate_double.png", SPRITE_SCALING)
+            val += 1
+            wall.center_x = 192
+            wall.center_y = y
+            self.wall_list.append(wall)
+
+        val = 0
+        for x in range(192, 1650, 64):
+            if val % 2 == 0:
+                wall = arcade.Sprite(":resources:images/tiles/stoneCenter.png", SPRITE_SCALING)
+            else:
+                wall = arcade.Sprite(":resources:images/tiles/boxCrate_double.png", SPRITE_SCALING)
+            val += 1
+            wall.center_x = x
+            wall.center_y = 0
+            self.wall_list.append(wall)
+
+        val = 0
+        for x in range(192, 1650, 64):
+            if val % 2 == 0:
+                wall = arcade.Sprite(":resources:images/tiles/stoneCenter.png", SPRITE_SCALING)
+            else:
+                wall = arcade.Sprite(":resources:images/tiles/boxCrate_double.png", SPRITE_SCALING)
+            val += 1
+            wall.center_x = x
+            wall.center_y = 1600
+            self.wall_list.append(wall)
 
         # -- Randomly place coins where there are no walls
         # Create the coins
