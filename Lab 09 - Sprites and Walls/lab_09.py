@@ -98,18 +98,6 @@ class MyGame(arcade.Window):
                 wall.center_y = y - 128
                 self.wall_list.append(wall)
 
-        # coordinate_list = [[400, 500],
-        #                    [470, 500],
-        #                    [400, 570],
-        #                    [470, 570]]
-        #
-        # # Loop through coordinates
-        # for coordinate in coordinate_list:
-        #     wall = arcade.Sprite(":resources:images/tiles/boxCrate.png", SPRITE_SCALING)
-        #     wall.center_x = coordinate[0]
-        #     wall.center_y = coordinate[1]
-        #     self.wall_list.append(wall)
-
         val = 0
         for y in range(0, 1600, 64):
             if val % 2 == 0:
