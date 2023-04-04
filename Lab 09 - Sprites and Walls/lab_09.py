@@ -82,16 +82,16 @@ class MyGame(arcade.Window):
         self.player_list.append(self.player_sprite)
 
         # -- Set up several columns of walls
-        for y in range(128, 1650, 256):
-            for x in range(256, 1592, 256):
+        for y in range(128, 1600, 256):
+            for x in range(256, 1600, 256):
                 # Randomly skip a box so the player can find a way through
                 wall = arcade.Sprite(":resources:images/tiles/boxCrate.png", SPRITE_SCALING)
                 wall.center_x = x
                 wall.center_y = y
                 self.wall_list.append(wall)
 
-        for y in range(128, 1750, 256):
-            for x in range(512, 1592, 256):
+        for y in range(128, 1728, 256):
+            for x in range(512, 1600, 256):
                 # Randomly skip a box so the player can find a way through
                 wall = arcade.Sprite(":resources:images/tiles/boxCrate.png", SPRITE_SCALING)
                 wall.center_x = x - 128
