@@ -81,7 +81,6 @@ class MyGame(arcade.Window):
         # -- Set up several columns of walls
         for y in range(128, 1600, 256):
             for x in range(256, 1600, 256):
-                # Randomly skip a box so the player can find a way through
                 wall = arcade.Sprite(":resources:images/tiles/boxCrate.png", SPRITE_SCALING)
                 wall.center_x = x
                 wall.center_y = y
@@ -89,7 +88,6 @@ class MyGame(arcade.Window):
 
         for y in range(128, 1728, 256):
             for x in range(512, 1600, 256):
-                # Randomly skip a box so the player can find a way through
                 wall = arcade.Sprite(":resources:images/tiles/boxCrate.png", SPRITE_SCALING)
                 wall.center_x = x - 128
                 wall.center_y = y - 128
