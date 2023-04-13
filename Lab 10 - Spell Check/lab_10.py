@@ -73,13 +73,16 @@ def main():
 
     for line in alice_in_wonderland:
         word_list = split_line(line)
-        lower_bound = 0
-        upper_bound = len(line) - 1
-        found = False
+        # lower_bound = 0
+        # upper_bound = len(line) - 1
+        # found = False
         line_num += 1
         for word in word_list:
             # Start at the beginning of the list
-            current_list_position = 0
+            lower_bound = 0
+            upper_bound = len(dictionary_list) - 1
+            found = False
+
             if word not in dictionary_list:
                 # Loop until you reach the end of the list, or the value at the
                 # current position is equal to the key
@@ -94,14 +97,14 @@ def main():
                     # move up the lower bound, or
                     # move down the upper bound, or
                     # we found what we are looking for
-                    if word_list[middle_pos] < word.upper:
+                    if dictionary_list[middle_pos] < word.upper():
                         lower_bound = middle_pos + 1
-                    elif word_list[middle_pos] > word.upper:
+                    elif dictionary_list[middle_pos] > word.upper():
                         upper_bound = middle_pos - 1
                     else:
                         found = True
 
-                if found:
+                if not found:
                     print("Possible misspelling at Line", line_num, ' for word', word)
 
 
