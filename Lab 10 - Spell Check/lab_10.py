@@ -38,13 +38,15 @@ def main():
     # recommend writing in a function
     alice_in_wonderland = open("AliceInWonderLand200.txt")
 
+    line_num = 0
+
     for line in alice_in_wonderland:
         word_list = split_line(line)
-        for line in alice_in_wonderland:
-            for word in line:
-                # Start at the beginning of the list
-                current_list_position = 0
-
+        line_num += 1
+        for word in word_list:
+            # Start at the beginning of the list
+            current_list_position = 0
+            if word not in dictionary_list:
                 # Loop until you reach the end of the list, or the value at the
                 # current position is equal to the key
                 while current_list_position < len(dictionary_list) and dictionary_list[current_list_position] != \
@@ -52,12 +54,10 @@ def main():
                     # Advance to the next item in the list
                     current_list_position += 1
 
-                if current_list_position < len(dictionary_list):
-                    print("Line", current_list_position)
-                    break
-                else:
-                    print("The name was not in the list.")
-                    break
+                if current_list_position == len(dictionary_list):
+                    print("Possible misspelling at Line", line_num, ' for word', word)
+
+    alice_in_wonderland.close()
 
     # read chapter one line at a time
     # for each line call split line
@@ -67,6 +67,42 @@ def main():
     # Line x possible
 
     print('---Binary Search---')
+
+    alice_in_wonderland = open("AliceInWonderLand200.txt")
+    line_num = 0
+
+    for line in alice_in_wonderland:
+        word_list = split_line(line)
+        lower_bound = 0
+        upper_bound = len(line) - 1
+        found = False
+        line_num += 1
+        for word in word_list:
+            # Start at the beginning of the list
+            current_list_position = 0
+            if word not in dictionary_list:
+                # Loop until you reach the end of the list, or the value at the
+                # current position is equal to the key
+
+                # Loop until we find the item, or our upper/lower bounds meet
+                while lower_bound <= upper_bound and not found:
+
+                    # Find the middle position
+                    middle_pos = (lower_bound + upper_bound) // 2
+
+                    # Figure out if we:
+                    # move up the lower bound, or
+                    # move down the upper bound, or
+                    # we found what we are looking for
+                    if word_list[middle_pos] < word.upper:
+                        lower_bound = middle_pos + 1
+                    elif word_list[middle_pos] > word.upper:
+                        upper_bound = middle_pos - 1
+                    else:
+                        found = True
+
+                if found:
+                    print("Possible misspelling at Line", line_num, ' for word', word)
 
 
 if __name__ == '__main__':
