@@ -110,6 +110,7 @@ class MyGame(arcade.Window):
 
             if self.coord_good(row, column + 1):
                 self.toggle_coord(row, column + 1)
+
 def main():
 
     window = MyGame(SCREEN_WIDTH, SCREEN_HEIGHT)
