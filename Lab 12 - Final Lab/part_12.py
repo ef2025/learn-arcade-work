@@ -10,7 +10,7 @@ GRAVITY = 0.25
 
 LAYER_NAME_WALL = "Tile Layer 1"
 LAYER_NAME_BACKGROUND = "Tile Layer 2"
-LAYER_NAME_PLAYER = "Tile Layer 3"
+LAYER_NAME_COINS = "Tile Layer 3"
 
 DEFAULT_SCREEN_WIDTH = 800
 DEFAULT_SCREEN_HEIGHT = 600
@@ -60,17 +60,19 @@ class Mouse(arcade.Sprite):
 
         # --- Load Textures ---
 
-        # Images from Kenney.nl's 1-Bit Platformer pack
-        main_path = "C:/Users/erikf/Downloads/kenney_1-bit-platformer-pack/Tiles/Default/"
+        '''Images and Tilemap assets from Kenney.nl's 1-Bit Platformer pack'''
+        '''https://kenney.nl/assets/1-bit-platformer-pack'''
+
+        main_path = "."
 
         # Load textures for idle standing
-        self.idle_texture_pair = load_texture_pair(f"{main_path}mouse.png")
-        self.jump_texture_pair = load_texture_pair(f"{main_path}mousejump.png")
+        self.idle_texture_pair = load_texture_pair(f"mouse.png")
+        self.jump_texture_pair = load_texture_pair(f"mousejump.png")
 
         # Load textures for walking
         self.walk_textures = []
         for i in range(1, 3):
-            texture = load_texture_pair(f"{main_path}mousewalk{i}.png")
+            texture = load_texture_pair(f"mousewalk{i}.png")
             self.walk_textures.append(texture)
 
         # Set the initial texture
@@ -107,6 +109,10 @@ class Mouse(arcade.Sprite):
             self.character_face_direction
         ]
 
+    def update(self, delta_time: float = 1 / 60):
+        self.update_animation()
+        print("This function is called.")
+
 
 class MyGame(arcade.Window):
     """ Main application class. """
@@ -121,7 +127,6 @@ class MyGame(arcade.Window):
         self.decoration_layer = None
         self.coin_list = None
 
-        #self.scene = None
         self.score = 0
 
         # Set up the player
@@ -148,8 +153,6 @@ class MyGame(arcade.Window):
     def setup(self):
         """ Set up the game and initialize the variables. """
 
-        #self.scene = arcade.Scene()
-
         # Sprite lists
         self.player_list = arcade.SpriteList()
         self.wall_list = arcade.SpriteList()
@@ -158,7 +161,6 @@ class MyGame(arcade.Window):
         self.player_sprite = Mouse()
         self.player_sprite.center_x = 100
         self.player_sprite.center_y = 575
-        #self.scene.add_sprite(LAYER_NAME_PLAYER, self.player_sprite)
         self.player_list.append(self.player_sprite)
 
         # --- Load our map
@@ -172,8 +174,6 @@ class MyGame(arcade.Window):
         # }
 
         self.tile_map = arcade.load_tilemap(map_name, TILE_SCALING)
-
-        #self.scene = arcade.Scene.from_tilemap(self.tile_map)
 
         # Set wall and coin SpriteLists
         # Any other layers here. Array index must be a layer.
@@ -202,7 +202,6 @@ class MyGame(arcade.Window):
         self.clear()
         # Select the camera we'll use to draw all our sprites
         self.camera_sprites.use()
-        #self.scene.draw()
         # Draw all the sprites.
         self.decoration_layer.draw()
         self.wall_list.draw()
@@ -258,8 +257,6 @@ class MyGame(arcade.Window):
             self.player_sprite.change_x = -PLAYER_MOVEMENT_SPEED
         elif self.right_pressed and not self.left_pressed:
             self.player_sprite.change_x = PLAYER_MOVEMENT_SPEED
-
-        #self.scene.update_animation(delta_time, [LAYER_NAME_PLAYER])
 
         # Call update on all sprites (The sprites don't do much in this
         # example though.)
