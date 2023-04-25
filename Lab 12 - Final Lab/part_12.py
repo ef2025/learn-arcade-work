@@ -63,7 +63,7 @@ class Mouse(arcade.Sprite):
         '''Images and Tilemap assets from Kenney.nl's 1-Bit Platformer pack'''
         '''https://kenney.nl/assets/1-bit-platformer-pack'''
 
-        main_path = "."
+        # main_path = "."
 
         # Load textures for idle standing
         self.idle_texture_pair = load_texture_pair(f"mouse.png")
