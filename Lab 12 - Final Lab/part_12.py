@@ -57,8 +57,6 @@ class Mouse(arcade.Sprite):
 
         # Track our state
         self.jumping = False
-        self.climbing = False
-        self.is_on_ladder = False
 
         # --- Load Textures ---
 
@@ -92,7 +90,7 @@ class Mouse(arcade.Sprite):
             self.character_face_direction = RIGHT_FACING
 
         # Jumping animation
-        if self.change_y > 0 and not self.is_on_ladder:
+        if self.change_y > 0:
             self.texture = self.jump_texture_pair[self.character_face_direction]
             return
 
@@ -121,8 +119,10 @@ class MyGame(arcade.Window):
         self.player_list = None
         self.wall_list = None
         self.decoration_layer = None
+        self.coin_list = None
 
         #self.scene = None
+        self.score = 0
 
         # Set up the player
         self.player_sprite = None
@@ -165,13 +165,13 @@ class MyGame(arcade.Window):
 
         # Read in the tiled map
         map_name = "C:/Users/erikf/Downloads/map 1.tmj"
-        layer_options = {
-            LAYER_NAME_WALL: {
-                "use_spatial_hash": True,
-            },
-        }
+        # layer_options = {
+        #     LAYER_NAME_WALL: {
+        #         "use_spatial_hash": True,
+        #     },
+        # }
 
-        self.tile_map = arcade.load_tilemap(map_name, TILE_SCALING, layer_options)
+        self.tile_map = arcade.load_tilemap(map_name, TILE_SCALING)
 
         #self.scene = arcade.Scene.from_tilemap(self.tile_map)
 
@@ -179,7 +179,7 @@ class MyGame(arcade.Window):
         # Any other layers here. Array index must be a layer.
         self.wall_list = self.tile_map.sprite_lists["Tile Layer 1"]
         self.decoration_layer = self.tile_map.sprite_lists["Tile Layer 2"]
-        # self.coin_list = self.tile_map.sprite_lists["Coins"]
+        self.coin_list = self.tile_map.sprite_lists["Tile Layer 3"]
 
         # --- Other stuff
         # Set the background color
@@ -206,21 +206,20 @@ class MyGame(arcade.Window):
         # Draw all the sprites.
         self.decoration_layer.draw()
         self.wall_list.draw()
+        self.coin_list.draw()
         self.player_list.draw()
-
 
         # Select the (unscrolled) camera for our GUI
         self.camera_gui.use()
 
         # Draw the GUI
-        arcade.draw_rectangle_filled(self.width // 2,
-                                     20,
-                                     self.width,
-                                     40,
-                                     arcade.color.ALMOND)
-        text = f"Scroll value: ({self.camera_sprites.position[0]:5.1f}, " \
-               f"{self.camera_sprites.position[1]:5.1f})"
-        arcade.draw_text(text, 10, 10, arcade.color.BLACK_BEAN, 20)
+        # arcade.draw_rectangle_filled(self.width // 2,
+        #                              20,
+        #                              self.width,
+        #                              40,
+        #                              arcade.color.ALMOND)
+        text = f"Score: {self.score}"
+        arcade.draw_text(text, 10, 10, arcade.color.YELLOW, 20)
 
     def on_key_press(self, key, modifiers):
         """
@@ -248,6 +247,12 @@ class MyGame(arcade.Window):
         # Calculate speed based on the keys pressed
         self.player_sprite.change_x = 0
         # self.player_sprite.change_y = 0
+        self.coin_list.update()
+
+        coin_hit_list = arcade.check_for_collision_with_list(self.player_sprite, self.coin_list)
+        for coin in coin_hit_list:
+            coin.remove_from_sprite_lists()
+            self.score += 1
 
         if self.left_pressed and not self.right_pressed:
             self.player_sprite.change_x = -PLAYER_MOVEMENT_SPEED
@@ -289,6 +294,7 @@ def main():
     """ Main function """
     window = MyGame(DEFAULT_SCREEN_WIDTH, DEFAULT_SCREEN_HEIGHT, SCREEN_TITLE)
     window.setup()
+    # possible arcade schedule call here
     arcade.run()
 
 
