@@ -66,8 +66,8 @@ class Mouse(arcade.Sprite):
         # main_path = "."
 
         # Load textures for idle standing
-        self.idle_texture_pair = load_texture_pair(f"mouse.png")
-        self.jump_texture_pair = load_texture_pair(f"mousejump.png")
+        self.idle_texture_pair = load_texture_pair("./mouse.png")
+        self.jump_texture_pair = load_texture_pair("./mousejump.png")
 
         # Load textures for walking
         self.walk_textures = []
