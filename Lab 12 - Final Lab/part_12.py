@@ -166,7 +166,7 @@ class MyGame(arcade.Window):
         # --- Load our map
 
         # Read in the tiled map
-        map_name = "C:/Users/erikf/Downloads/map 1.tmj"
+        map_name = "./map_1.tmj"
         # layer_options = {
         #     LAYER_NAME_WALL: {
         #         "use_spatial_hash": True,
