@@ -144,6 +144,7 @@ class MyGame(arcade.Window):
 
         # Store our tile map
         self.tile_map = None
+        self.tile_set = None
 
         # Create the cameras. One for the GUI, one for the sprites.
         # We scroll the 'sprite world' but not the GUI.
@@ -166,14 +167,15 @@ class MyGame(arcade.Window):
         # --- Load our map
 
         # Read in the tiled map
-        map_name = "./map_1.tmj"
-        # layer_options = {
-        #     LAYER_NAME_WALL: {
-        #         "use_spatial_hash": True,
-        #     },
-        # }
+        map_name = "./map 1.tmj"
+        layer_options = {
+            LAYER_NAME_WALL: {
+                "use_spatial_hash": True,
+            },
+            LAYER_NAME_BACKGROUND: {"use_spatial_hash": True,
+            }, LAYER_NAME_COINS: {"use_spatial_hash": True}}
 
-        self.tile_map = arcade.load_tilemap(map_name, TILE_SCALING)
+        self.tile_map = arcade.load_tilemap(map_name, TILE_SCALING, layer_options)
 
         # Set wall and coin SpriteLists
         # Any other layers here. Array index must be a layer.
@@ -199,7 +201,6 @@ class MyGame(arcade.Window):
         # This command has to happen before we start drawing
         arcade.start_render()
 
-        self.clear()
         # Select the camera we'll use to draw all our sprites
         self.camera_sprites.use()
         # Draw all the sprites.
