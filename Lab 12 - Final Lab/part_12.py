@@ -167,7 +167,7 @@ class MyGame(arcade.Window):
         # --- Load our map
 
         # Read in the tiled map
-        map_name = "./map 1.tmj"
+        map_name = "./map_2.tmj"
         layer_options = {
             LAYER_NAME_WALL: {
                 "use_spatial_hash": True,
