@@ -72,7 +72,7 @@ class Mouse(arcade.Sprite):
         # Load textures for walking
         self.walk_textures = []
         for i in range(1, 3):
-            texture = load_texture_pair(f"mousewalk{i}.png")
+            texture = load_texture_pair(f"./mousewalk{i}.png")
             self.walk_textures.append(texture)
 
         # Set the initial texture
