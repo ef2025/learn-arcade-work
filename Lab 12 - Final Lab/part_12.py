@@ -212,12 +212,7 @@ class MyGame(arcade.Window):
         # Select the (unscrolled) camera for our GUI
         self.camera_gui.use()
 
-        # Draw the GUI
-        # arcade.draw_rectangle_filled(self.width // 2,
-        #                              20,
-        #                              self.width,
-        #                              40,
-        #                              arcade.color.ALMOND)
+        # Draw the score
         text = f"Score: {self.score}"
         arcade.draw_text(text, 10, 10, arcade.color.YELLOW, 20)
 
