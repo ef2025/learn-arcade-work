@@ -224,7 +224,7 @@
  "tilesets":[
         {
          "firstgid":1,
-         "source":"Tileset.tsj"
+         "source":"./Tileset2.tsj"
         }],
  "tilewidth":16,
  "type":"map",
