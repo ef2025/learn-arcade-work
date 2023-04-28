@@ -16,6 +16,9 @@ DEFAULT_SCREEN_WIDTH = 800
 DEFAULT_SCREEN_HEIGHT = 600
 SCREEN_TITLE = "Sprite Move with Scrolling Screen Example"
 
+PLAYER_START_X = 100
+PLAYER_START_Y = 575
+
 # How many pixels to keep as a minimum margin between the character
 # and the edge of the screen.
 VIEWPORT_MARGIN = 50
@@ -82,6 +85,8 @@ class Mouse(arcade.Sprite):
         # a different hit box, you can do it like the code below.
         # set_hit_box = [[-22, -64], [22, -64], [22, 28], [-22, 28]]
         self.hit_box = self.texture.hit_box_points
+        self.update()
+        self.update_animation()
 
     def update_animation(self, delta_time: float = 1 / 60):
 
@@ -108,10 +113,11 @@ class Mouse(arcade.Sprite):
         self.texture = self.walk_textures[self.cur_texture][
             self.character_face_direction
         ]
+        print("The update animation function is called.")
 
     def update(self, delta_time: float = 1 / 60):
         self.update_animation()
-        print("This function is called.")
+        # print("The update function is called.")
 
 
 class MyGame(arcade.Window):
@@ -126,6 +132,8 @@ class MyGame(arcade.Window):
         self.wall_list = None
         self.decoration_layer = None
         self.coin_list = None
+        self.spike_list = None
+        self.goal_list = None
 
         self.score = 0
 
@@ -150,6 +158,9 @@ class MyGame(arcade.Window):
         # We scroll the 'sprite world' but not the GUI.
         self.camera_sprites = arcade.Camera(DEFAULT_SCREEN_WIDTH, DEFAULT_SCREEN_HEIGHT)
         self.camera_gui = arcade.Camera(DEFAULT_SCREEN_WIDTH, DEFAULT_SCREEN_HEIGHT)
+        # Loading the sounds
+        self.coin_sound = arcade.load_sound(":resources:sounds/coin5.wav")
+        self.hurt_sound = arcade.load_sound(":resources:sounds/hurt3.wav")
 
     def setup(self):
         """ Set up the game and initialize the variables. """
@@ -172,8 +183,7 @@ class MyGame(arcade.Window):
             LAYER_NAME_WALL: {
                 "use_spatial_hash": True,
             },
-            LAYER_NAME_BACKGROUND: {"use_spatial_hash": True,
-            }, LAYER_NAME_COINS: {"use_spatial_hash": True}}
+            LAYER_NAME_BACKGROUND: {"use_spatial_hash": True}, LAYER_NAME_COINS: {"use_spatial_hash": True}}
 
         self.tile_map = arcade.load_tilemap(map_name, TILE_SCALING, layer_options)
 
@@ -182,6 +192,8 @@ class MyGame(arcade.Window):
         self.wall_list = self.tile_map.sprite_lists["Tile Layer 1"]
         self.decoration_layer = self.tile_map.sprite_lists["Tile Layer 2"]
         self.coin_list = self.tile_map.sprite_lists["Tile Layer 3"]
+        self.spike_list = self.tile_map.sprite_lists["Tile Layer 4"]
+        self.goal_list = self.tile_map.sprite_lists["Tile Layer 5"]
 
         # --- Other stuff
         # Set the background color
@@ -207,6 +219,8 @@ class MyGame(arcade.Window):
         self.decoration_layer.draw()
         self.wall_list.draw()
         self.coin_list.draw()
+        self.spike_list.draw()
+        self.goal_list.draw()
         self.player_list.draw()
 
         # Select the (unscrolled) camera for our GUI
@@ -220,13 +234,14 @@ class MyGame(arcade.Window):
         """
         Called whenever a key is pressed.
         """
-        if key == arcade.key.UP:
-            if self.physics_engine.can_jump():
-                self.player_sprite.change_y = JUMP_SPEED
-        elif key == arcade.key.LEFT:
-            self.left_pressed = True
-        elif key == arcade.key.RIGHT:
-            self.right_pressed = True
+        if len(self.goal_list) > 0:
+            if key == arcade.key.UP:
+                if self.physics_engine.can_jump():
+                    self.player_sprite.change_y = JUMP_SPEED
+            elif key == arcade.key.LEFT:
+                self.left_pressed = True
+            elif key == arcade.key.RIGHT:
+                self.right_pressed = True
 
     def on_key_release(self, key, modifiers):
         """Called when the user releases a key. """
@@ -248,6 +263,24 @@ class MyGame(arcade.Window):
         for coin in coin_hit_list:
             coin.remove_from_sprite_lists()
             self.score += 1
+            arcade.play_sound(self.coin_sound)
+
+        if arcade.check_for_collision_with_list(self.player_sprite, self.spike_list):
+            self.player_sprite.center_x = PLAYER_START_X
+            self.player_sprite.center_y = PLAYER_START_Y
+            self.player_sprite.change_x = 0
+            self.player_sprite.change_y = 0
+            arcade.play_sound(self.hurt_sound)
+
+        goal_hit_list = arcade.check_for_collision_with_list(self.player_sprite, self.goal_list)
+        for goal in goal_hit_list:
+            goal.remove_from_sprite_lists()
+
+        if len(self.goal_list) <= 0:
+            self.player_sprite.change_x = 0
+            self.player_sprite.change_y = 0
+            arcade.draw_text("GAME OVER", self.player_sprite.center_x, self.player_sprite.center_y,
+                             arcade.csscolor.WHITE, 200)
 
         if self.left_pressed and not self.right_pressed:
             self.player_sprite.change_x = -PLAYER_MOVEMENT_SPEED
