@@ -226,6 +226,13 @@ class MyGame(arcade.Window):
         # Select the (unscrolled) camera for our GUI
         self.camera_gui.use()
 
+        if len(self.goal_list) <= 0:
+            arcade.draw_text("GAME OVER", DEFAULT_SCREEN_WIDTH / 6, DEFAULT_SCREEN_HEIGHT / 2,
+                         arcade.csscolor.WHITE, 64)
+
+            # arcade.draw_text("GAME OVER", self.player_sprite.center_x, self.player_sprite.center_y,
+            #              arcade.csscolor.WHITE, 200)
+
         # Draw the score
         text = f"Score: {self.score}"
         arcade.draw_text(text, 10, 10, arcade.color.YELLOW, 20)
@@ -252,47 +259,47 @@ class MyGame(arcade.Window):
             self.right_pressed = False
 
     def on_update(self, delta_time):
-        """ Movement and game logic """
-
-        # Calculate speed based on the keys pressed
-        self.player_sprite.change_x = 0
-        # self.player_sprite.change_y = 0
-        self.coin_list.update()
-
-        coin_hit_list = arcade.check_for_collision_with_list(self.player_sprite, self.coin_list)
-        for coin in coin_hit_list:
-            coin.remove_from_sprite_lists()
-            self.score += 1
-            arcade.play_sound(self.coin_sound)
-
-        if arcade.check_for_collision_with_list(self.player_sprite, self.spike_list):
-            self.player_sprite.center_x = PLAYER_START_X
-            self.player_sprite.center_y = PLAYER_START_Y
-            self.player_sprite.change_x = 0
-            self.player_sprite.change_y = 0
-            arcade.play_sound(self.hurt_sound)
-
-        goal_hit_list = arcade.check_for_collision_with_list(self.player_sprite, self.goal_list)
-        for goal in goal_hit_list:
-            goal.remove_from_sprite_lists()
-
         if len(self.goal_list) <= 0:
             self.player_sprite.change_x = 0
             self.player_sprite.change_y = 0
-            arcade.draw_text("GAME OVER", self.player_sprite.center_x, self.player_sprite.center_y,
-                             arcade.csscolor.WHITE, 200)
+        else:
 
-        if self.left_pressed and not self.right_pressed:
-            self.player_sprite.change_x = -PLAYER_MOVEMENT_SPEED
-        elif self.right_pressed and not self.left_pressed:
-            self.player_sprite.change_x = PLAYER_MOVEMENT_SPEED
+            """ Movement and game logic """
 
-        # Call update on all sprites (The sprites don't do much in this
-        # example though.)
-        self.physics_engine.update()
+            # Calculate speed based on the keys pressed
+            self.player_sprite.change_x = 0
+            # self.player_sprite.change_y = 0
+            self.coin_list.update()
 
-        # Scroll the screen to the player
-        self.scroll_to_player()
+            coin_hit_list = arcade.check_for_collision_with_list(self.player_sprite, self.coin_list)
+            for coin in coin_hit_list:
+                coin.remove_from_sprite_lists()
+                self.score += 1
+                arcade.play_sound(self.coin_sound)
+
+            if arcade.check_for_collision_with_list(self.player_sprite, self.spike_list):
+                self.player_sprite.center_x = PLAYER_START_X
+                self.player_sprite.center_y = PLAYER_START_Y
+                self.player_sprite.change_x = 0
+                self.player_sprite.change_y = 0
+                arcade.play_sound(self.hurt_sound)
+
+            goal_hit_list = arcade.check_for_collision_with_list(self.player_sprite, self.goal_list)
+            for goal in goal_hit_list:
+                goal.remove_from_sprite_lists()
+
+
+            if self.left_pressed and not self.right_pressed:
+                self.player_sprite.change_x = -PLAYER_MOVEMENT_SPEED
+            elif self.right_pressed and not self.left_pressed:
+                self.player_sprite.change_x = PLAYER_MOVEMENT_SPEED
+
+            # Call update on all sprites (The sprites don't do much in this
+            # example though.)
+            self.physics_engine.update()
+
+            # Scroll the screen to the player
+            self.scroll_to_player()
 
     def scroll_to_player(self):
         """
