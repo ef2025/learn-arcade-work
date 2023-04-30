@@ -14,9 +14,9 @@ LAYER_NAME_COINS = "Tile Layer 3"
 
 DEFAULT_SCREEN_WIDTH = 800
 DEFAULT_SCREEN_HEIGHT = 600
-SCREEN_TITLE = "Sprite Move with Scrolling Screen Example"
+SCREEN_TITLE = "Erik Flint - Final Lab"
 
-PLAYER_START_X = 100
+PLAYER_START_X = 375
 PLAYER_START_Y = 575
 
 # How many pixels to keep as a minimum margin between the character
@@ -171,8 +171,8 @@ class MyGame(arcade.Window):
 
         # Set up the player
         self.player_sprite = Mouse()
-        self.player_sprite.center_x = 100
-        self.player_sprite.center_y = 575
+        self.player_sprite.center_x = PLAYER_START_X
+        self.player_sprite.center_y = PLAYER_START_Y
         self.player_list.append(self.player_sprite)
 
         # --- Load our map
@@ -287,7 +287,6 @@ class MyGame(arcade.Window):
             goal_hit_list = arcade.check_for_collision_with_list(self.player_sprite, self.goal_list)
             for goal in goal_hit_list:
                 goal.remove_from_sprite_lists()
-
 
             if self.left_pressed and not self.right_pressed:
                 self.player_sprite.change_x = -PLAYER_MOVEMENT_SPEED
