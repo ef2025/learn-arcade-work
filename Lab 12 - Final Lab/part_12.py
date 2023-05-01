@@ -14,7 +14,7 @@ LAYER_NAME_COINS = "Tile Layer 3"
 
 DEFAULT_SCREEN_WIDTH = 800
 DEFAULT_SCREEN_HEIGHT = 600
-SCREEN_TITLE = "Sprite Move with Scrolling Screen Example"
+SCREEN_TITLE = "Erik Flint - Final Lab"
 
 PLAYER_START_X = 325
 PLAYER_START_Y = 575
