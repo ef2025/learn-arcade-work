@@ -14,9 +14,9 @@ LAYER_NAME_COINS = "Tile Layer 3"
 
 DEFAULT_SCREEN_WIDTH = 800
 DEFAULT_SCREEN_HEIGHT = 600
-SCREEN_TITLE = "Erik Flint - Final Lab"
+SCREEN_TITLE = "Sprite Move with Scrolling Screen Example"
 
-PLAYER_START_X = 375
+PLAYER_START_X = 325
 PLAYER_START_Y = 575
 
 # How many pixels to keep as a minimum margin between the character
@@ -60,6 +60,8 @@ class Mouse(arcade.Sprite):
 
         # Track our state
         self.jumping = False
+        self.pace = 0.100
+        self.elapsed_time = 0
 
         # --- Load Textures ---
 
@@ -69,13 +71,13 @@ class Mouse(arcade.Sprite):
         # main_path = "."
 
         # Load textures for idle standing
-        self.idle_texture_pair = load_texture_pair("./mouse.png")
-        self.jump_texture_pair = load_texture_pair("./mousejump.png")
+        self.idle_texture_pair = load_texture_pair("./mousetr.png")
+        self.jump_texture_pair = load_texture_pair("./mousejumptr.png")
 
         # Load textures for walking
         self.walk_textures = []
         for i in range(1, 3):
-            texture = load_texture_pair(f"./mousewalk{i}.png")
+            texture = load_texture_pair(f"./mousewalk{i}tr.png")
             self.walk_textures.append(texture)
 
         # Set the initial texture
@@ -85,38 +87,36 @@ class Mouse(arcade.Sprite):
         # a different hit box, you can do it like the code below.
         # set_hit_box = [[-22, -64], [22, -64], [22, 28], [-22, 28]]
         self.hit_box = self.texture.hit_box_points
-        self.update()
-        self.update_animation()
+        #self.update_animation()
+        #self.update()
+
 
     def update_animation(self, delta_time: float = 1 / 60):
-
         # Figure out if we need to flip face left or right
         if self.change_x < 0 and self.character_face_direction == RIGHT_FACING:
             self.character_face_direction = LEFT_FACING
+
         elif self.change_x > 0 and self.character_face_direction == LEFT_FACING:
             self.character_face_direction = RIGHT_FACING
 
         # Jumping animation
-        if self.change_y > 0:
+        if self.change_y != 0:
             self.texture = self.jump_texture_pair[self.character_face_direction]
-            return
 
         # Idle animation
-        if self.change_x == 0:
+        elif self.change_x == 0:
             self.texture = self.idle_texture_pair[self.character_face_direction]
-            return
+        else:
+            self.elapsed_time += delta_time
+            if self.elapsed_time > self.pace: # walking pace
+                self.elapsed_time = 0 # reset
+                # Walking animation
+                self.cur_texture += 1
+                self.cur_texture %= 2
+                self.texture = self.walk_textures[self.character_face_direction][self.cur_texture]
 
-        # Walking animation
-        self.cur_texture += 1
-        if self.cur_texture >= 2:
-            self.cur_texture = 0
-        self.texture = self.walk_textures[self.cur_texture][
-            self.character_face_direction
-        ]
-        print("The update animation function is called.")
-
-    def update(self, delta_time: float = 1 / 60):
-        self.update_animation()
+    #def update(self, delta_time: float = 1 / 60):
+        #self.update_animation()
         # print("The update function is called.")
 
 
@@ -265,7 +265,7 @@ class MyGame(arcade.Window):
         else:
 
             """ Movement and game logic """
-
+            self.player_sprite.update_animation()
             # Calculate speed based on the keys pressed
             self.player_sprite.change_x = 0
             # self.player_sprite.change_y = 0
