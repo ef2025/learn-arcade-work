@@ -60,15 +60,13 @@ class Mouse(arcade.Sprite):
 
         # Track our state
         self.jumping = False
-        self.pace = 0.100
+        self.pace = 0.150
         self.elapsed_time = 0
 
         # --- Load Textures ---
 
         '''Images and Tilemap assets from Kenney.nl's 1-Bit Platformer pack'''
         '''https://kenney.nl/assets/1-bit-platformer-pack'''
-
-        # main_path = "."
 
         # Load textures for idle standing
         self.idle_texture_pair = load_texture_pair("./mousetr.png")
@@ -103,12 +101,12 @@ class Mouse(arcade.Sprite):
             self.texture = self.idle_texture_pair[self.character_face_direction]
         else:
             self.elapsed_time += delta_time
-            if self.elapsed_time > self.pace: # walking pace
-                self.elapsed_time = 0 # reset
+            if self.elapsed_time > self.pace:  # walking pace
+                self.elapsed_time = 0  # reset
                 # Walking animation
                 self.cur_texture += 1
                 self.cur_texture %= 2
-                self.texture = self.walk_textures[self.character_face_direction][self.cur_texture]
+                self.texture = self.walk_textures[self.cur_texture][self.character_face_direction]
 
 
 class MyGame(arcade.Window):
