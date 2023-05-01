@@ -83,12 +83,9 @@ class Mouse(arcade.Sprite):
         # Set the initial texture
         self.texture = self.idle_texture_pair[0]
 
-        # Hit box will be set based on the first image used. If you want to specify
-        # a different hit box, you can do it like the code below.
-        # set_hit_box = [[-22, -64], [22, -64], [22, 28], [-22, 28]]
+        # Sets the hit box
         self.hit_box = self.texture.hit_box_points
-        #self.update_animation()
-        #self.update()
+
 
 
     def update_animation(self, delta_time: float = 1 / 60):
@@ -114,10 +111,6 @@ class Mouse(arcade.Sprite):
                 self.cur_texture += 1
                 self.cur_texture %= 2
                 self.texture = self.walk_textures[self.character_face_direction][self.cur_texture]
-
-    #def update(self, delta_time: float = 1 / 60):
-        #self.update_animation()
-        # print("The update function is called.")
 
 
 class MyGame(arcade.Window):
