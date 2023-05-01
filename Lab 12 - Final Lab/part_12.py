@@ -86,8 +86,6 @@ class Mouse(arcade.Sprite):
         # Sets the hit box
         self.hit_box = self.texture.hit_box_points
 
-
-
     def update_animation(self, delta_time: float = 1 / 60):
         # Figure out if we need to flip face left or right
         if self.change_x < 0 and self.character_face_direction == RIGHT_FACING:
@@ -280,6 +278,7 @@ class MyGame(arcade.Window):
             goal_hit_list = arcade.check_for_collision_with_list(self.player_sprite, self.goal_list)
             for goal in goal_hit_list:
                 goal.remove_from_sprite_lists()
+                arcade.play_sound(self.coin_sound)
 
             if self.left_pressed and not self.right_pressed:
                 self.player_sprite.change_x = -PLAYER_MOVEMENT_SPEED
@@ -296,10 +295,6 @@ class MyGame(arcade.Window):
     def scroll_to_player(self):
         """
         Scroll the window to the player.
-
-        if CAMERA_SPEED is 1, the camera will immediately move to the desired position.
-        Anything between 0 and 1 will have the camera move to the location with a
-        smoother pan.
         """
 
         position = Vec2(self.player_sprite.center_x - self.height / 2,
@@ -319,7 +314,6 @@ def main():
     """ Main function """
     window = MyGame(DEFAULT_SCREEN_WIDTH, DEFAULT_SCREEN_HEIGHT, SCREEN_TITLE)
     window.setup()
-    # possible arcade schedule call here
     arcade.run()
 
 
